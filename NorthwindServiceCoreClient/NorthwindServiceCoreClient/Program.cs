@@ -10,6 +10,7 @@ namespace NorthwindServiceCoreClient
             const string serviceUri = "https://services.odata.org/V3/Northwind/Northwind.svc/";
             var entities = new NorthwindModel.NorthwindEntities(new Uri(serviceUri));
 
+            ManualResetEventSlim mre = new ManualResetEventSlim();
             IAsyncResult asyncResult = entities.Employees.BeginExecute((ar) =>
             {
                 var employees = entities.Employees.EndExecute(ar);
@@ -20,9 +21,11 @@ namespace NorthwindServiceCoreClient
                     Console.WriteLine("\t{0} {1}", person.FirstName, person.LastName);
                 }
 
+                mre.Set();
+
             }, null);
 
-            WaitHandle.WaitAny(new[] { asyncResult.AsyncWaitHandle });
+            WaitHandle.WaitAny(new[] { mre.WaitHandle });
         }
     }
 }
