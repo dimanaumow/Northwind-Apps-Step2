@@ -13,16 +13,16 @@ namespace NorthwindServiceCoreAsyncClient
 
             var employees = await Task<IEnumerable<NorthwindModel.Employee>>.Factory.FromAsync(
                 entities.Employees.BeginExecute(null, null),
-                (iar) => entities.Employees.EndExecute(iar));
+                (iar) =>
+                {
+                    return entities.Employees.EndExecute(iar);
+                });
 
             Console.WriteLine("Employees in Northwind service:");
             foreach (var person in employees)
             {
                 Console.WriteLine("\t{0} {1}", person.FirstName, person.LastName);
             }
-
-            Console.WriteLine("Press any key to continue.");
-            Console.ReadLine();
         }
     }
 }

@@ -12,10 +12,10 @@ namespace NorthwindServiceCoreClient
 
             IAsyncResult asyncResult = entities.Employees.BeginExecute((ar) =>
             {
-                Console.WriteLine("People in TripPin service:");
-                var people = entities.Employees.EndExecute(ar);
+                var employees = entities.Employees.EndExecute(ar);
 
-                foreach (var person in people)
+                Console.WriteLine("Employees in Northwind service:");
+                foreach (var person in employees)
                 {
                     Console.WriteLine("\t{0} {1}", person.FirstName, person.LastName);
                 }
@@ -23,9 +23,6 @@ namespace NorthwindServiceCoreClient
             }, null);
 
             WaitHandle.WaitAny(new[] { asyncResult.AsyncWaitHandle });
-
-            Console.WriteLine("Press any key to continue.");
-            Console.ReadLine();
         }
     }
 }
